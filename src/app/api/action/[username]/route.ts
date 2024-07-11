@@ -16,6 +16,7 @@ import {
   createPostResponse,
   ActionGetResponse,
 } from "@solana/actions";
+import { useSearchParams } from "next/navigation";
 
 export async function GET(
   req: NextRequest,
@@ -24,15 +25,40 @@ export async function GET(
   const username = params.username;
 
   let response: ActionGetResponse = {
-    icon: "https://tipatweet.fun/favicon.ico",
+    icon: "https://tipatweet.fun/icon-transparent.png",
     title: "Tip a Tweet of " + username,
     description: "Tip a tweet of " + username,
     label: "Tip a Tweet",
+    error: {
+      message: "An unknown error occurred",
+    },
     links: {
       actions: [
         {
-          label: "Tip",
-          href: `/api/action/${username}`,
+          label: "Tip 0.001 SOL",
+          href: `/api/action/${username}?amount=0.001`,
+        },
+        {
+          label: "Tip 0.01 SOL",
+          href: `/api/action/${username}?amount=0.01`,
+        },
+        {
+          label: "Tip 0.1 SOL",
+          href: `/api/action/${username}?amount=0.1`,
+        },
+        {
+          label: "Tip 1 SOL",
+          href: `/api/action/${username}?amount=1`,
+        },
+        {
+          label: "Tip X", // button text
+          href: "/api/action/${username}?amount={amount}",
+          parameters: [
+            {
+              name: "amount", // field name
+              label: "Enter a custom SOL amount", // text input placeholder
+            },
+          ],
         },
       ],
     },
@@ -55,6 +81,10 @@ export async function POST(
     const body = (await req.json()) as { account: string };
     let link = await TipLink.create();
 
+    const { searchParams } = new URL(req.url);
+    const amount = searchParams.get("amount") as string;
+    console.log("Amount: ", amount);
+
     const connection = new Connection(
       clusterApiUrl("mainnet-beta"),
       "confirmed"
@@ -67,7 +97,7 @@ export async function POST(
       SystemProgram.transfer({
         fromPubkey: sender,
         toPubkey: new PublicKey(reciever),
-        lamports: LAMPORTS_PER_SOL * 0.001,
+        lamports: LAMPORTS_PER_SOL * parseFloat(amount),
       })
     );
 
