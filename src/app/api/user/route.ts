@@ -7,32 +7,33 @@ export function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
-  let username = (session?.user as any)?.username;
+  try {
+    const session = await auth();
+    let username = (session?.user as any)?.username;
 
-  console.log(username);
-  console.log(session);
+    if (!username) {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
 
-  if (!username) {
-    return NextResponse.json(
-      {
-        message: "Unauthorized",
+    let links = await prisma.links.findMany({
+      where: {
+        sub: username,
       },
-      {
-        status: 401,
-      }
-    );
+      select: {
+        url: true,
+        amount: true,
+      },
+    });
+
+    return NextResponse.json(links);
+  } catch (e) {
+    return NextResponse.json({ message: e }, { status: 500 });
   }
-
-  let links = await prisma.links.findMany({
-    where: {
-      sub: username,
-    },
-    select: {
-      url: true,
-      amount: true,
-    },
-  });
-
-  return NextResponse.json(links);
 }
