@@ -39,6 +39,7 @@ export default function Profile({
             width={128}
             height={128}
             className="rounded-full mb-4 lg:mb-0 lg:mr-8"
+            unoptimized
           />
           <div>
             <h2 className="text-3xl font-bold mb-2 text-center lg:text-left">

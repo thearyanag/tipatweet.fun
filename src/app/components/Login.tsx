@@ -1,31 +1,42 @@
+// Remove the 'use client' directive
+
 import React from "react";
 import Image from "next/image";
+import { signIn } from "@/auth";
 
 export default function LoginScreen() {
+  async function handleSignIn() {
+    'use server';
+    await signIn("twitter", { callbackUrl: "/" });
+  }
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-8">
       <div className="w-full max-w-4xl bg-gray-900 rounded-3xl p-12 shadow-2xl border border-gray-700">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-4xl font-bold text-white mb-6 leading-tight">
-              Accept tips and manage who tipped you, directly through your
-              X account
+              Accept tips and manage who tipped you, directly through your X
+              account
             </h1>
             <p className="text-gray-400 mb-8">
-              Connect your X account to start receiving tips and track
-              your supporters easily.
+              Connect your X account to start receiving tips and track your
+              supporters easily.
             </p>
-            <div className="flex items-center space-x-4">
+            <form action={handleSignIn} className="flex items-center space-x-4">
               <Image
                 src="/twitter-logo.png"
                 alt="Twitter Logo"
                 width={32}
                 height={32}
               />
-              <button className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+              <button
+                type="submit"
+                className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+              >
                 Login with X (prev Twitter)
               </button>
-            </div>
+            </form>
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="w-64 h-64 rounded-full bg-gradient-to-br from-sky-400 to-purple-500 flex flex-col items-center justify-center p-4">
