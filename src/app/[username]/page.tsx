@@ -18,7 +18,12 @@ export default function Username({ params }: { params: { username: string } }) {
         <div className="bg-gradient-to-r from-gray-900 to-black text-white p-8 rounded-xl mb-12 shadow-lg border border-gray-700">
           <p className="text-center">
             Want to make your own page?{" "}
-            <Link className="italic text-blue-400" href={"https://tipatweet.fun/"}>login here</Link>
+            <Link
+              className="italic text-blue-400"
+              href={"https://tipatweet.fun/"}
+            >
+              login here
+            </Link>
           </p>
         </div>
       </main>
