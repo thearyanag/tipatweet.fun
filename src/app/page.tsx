@@ -4,12 +4,7 @@ import Profile from "./components/Profile";
 import LoginScreen from "./components/Login";
 import { auth } from "@/auth";
 
-interface Tip {
-  url: string;
-  amount: number;
-}
-
-export default async function Home({ tips }: { tips: Tip[] }) {
+export default async function Home() {
   const sesssion = await auth();
 
   const isAuth = sesssion?.user ? true : false;
