@@ -4,23 +4,13 @@ import Profile from "./components/Profile";
 import LoginScreen from "./components/Login";
 import { auth } from "@/auth";
 
-export default async function Home() {
-  const sesssion = await auth();
+interface Tip {
+  url: string;
+  amount: number;
+}
 
-  const tips = [
-    {
-      amount: "1.23",
-      link: "https://twitter.com/_0xaryan/status/1437754526546871297",
-    },
-    {
-      amount: "4.56",
-      link: "https://twitter.com/_0xaryan/status/1437754526546871297",
-    },
-    {
-      amount: "7.89",
-      link: "https://twitter.com/_0xaryan/status/1437754526546871297",
-    },
-  ];
+export default async function Home({ tips }: { tips: Tip[] }) {
+  const sesssion = await auth();
 
   const isAuth = sesssion?.user ? true : false;
 
@@ -41,7 +31,7 @@ export default async function Home() {
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-4">
-            <TipsTable tips={tips} />
+            <TipsTable />
           </div>
         </div>
       </main>

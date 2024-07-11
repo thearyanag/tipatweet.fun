@@ -2,6 +2,7 @@ import { TipLink } from "@tiplink/api";
 import { NextRequest, NextResponse } from "next/server";
 import { ReactNode } from "react";
 import satori from "satori";
+import prisma from "@/prisma";
 import {
   Transaction,
   PublicKey,
@@ -11,11 +12,9 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import {
-  ActionPostResponse,
   ACTIONS_CORS_HEADERS,
   createPostResponse,
   ActionGetResponse,
-  ActionPostRequest,
 } from "@solana/actions";
 
 export async function GET(
@@ -23,7 +22,6 @@ export async function GET(
   { params }: { params: { username: string } }
 ) {
   const username = params.username;
-  console.log(username);
 
   let response: ActionGetResponse = {
     icon: "https://tipatweet.fun/favicon.ico",
@@ -80,6 +78,14 @@ export async function POST(
       fields: {
         transaction: tx,
         message: "generate your own at tipatweet.fun",
+      },
+    });
+
+    await prisma.links.create({
+      data: {
+        sub: username,
+        url: link.url.toString(),
+        amount: 0.001,
       },
     });
 
